@@ -8,7 +8,17 @@ class Category extends Model
 {
     protected $table = 'categories';
 
-    public function posts(){
-    	return $this->hasMany('\App\Post')->where('status', '=', 'PUBLISHED')->orderBy('created_at', 'DESC');
+    protected $fillable = ['slug', 'name'];
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class)
+            ->published()
+            ->orderBy('created_at', 'DESC');
+    }
+
+    public function parent_id()
+    {
+        return $this->belongsTo(self::class);
     }
 }

@@ -2,32 +2,44 @@
 
 namespace TCG\Voyager\Traits;
 
+use TCG\Voyager\Models\Role;
+
+/**
+ * @property  \Illuminate\Database\Eloquent\Collection  roles
+ */
 trait VoyagerUser
 {
-    //
-    public function roles(){
-        return $this->belongsToMany('TCG\Voyager\Models\Role', 'user_roles');
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 
-    public function hasRole($name){
-        return in_array($name, array_pluck($this->roles->toArray(), 'name'));
+    /**
+     * Check if User has a Role(s) associated.
+     *
+     * @param string|array $name The role to check.
+     *
+     * @return bool
+     */
+    public function hasRole($name)
+    {
+        return in_array($this->role->name, (is_array($name) ? $name : [$name]));
     }
 
-    public function addRole($name){
-        // If user does not already have this role
-        if(!$this->hasRole($name)){
-            // Look up the role and attach it to the user
-            $role = \TCG\Voyager\Models\Role::where('name', '=', $name)->first();
-            $this->roles()->attach($role->id);
+    public function setRole($name)
+    {
+        $role = Role::where('name', '=', $name)->first();
+
+        if ($role) {
+            $this->role()->associate($role);
+            $this->save();
         }
+
+        return $this;
     }
 
-    public function deleteRole($name){
-        // If user has this role
-        if($this->hasRole($name)){
-            // Lookup the role and detach it from the user
-            $role = \TCG\Voyager\Models\Role::where('name', '=', $name)->first();
-            $this->roles()->detach($role->id);
-        }
+    public function hasPermission($name)
+    {
+        return in_array($name, $this->role->permissions->pluck('key')->toArray());
     }
 }
