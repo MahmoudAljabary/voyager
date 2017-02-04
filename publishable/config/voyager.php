@@ -86,24 +86,61 @@ return [
         ],
     ],
 
-        /*
+    /*
     |--------------------------------------------------------------------------
-    | Administration Config
+    | Widgets Config
     |--------------------------------------------------------------------------
     |
     | Here you can specify voyager administration settings
     |
     */
 
-    'admin' => [
-        /*
-        'product' => [
-            'name' => 'Product',
-            'model' => '\App\Product',
-            'route' => 'admin.products',
-            'image' => '/images/widget-backgrounds/01.png'
+    'widgets' => [
+        [
+            'name'  => 'User',
+            'icon'  => 'voyager-group',
+            'model' => TCG\Voyager\Models\User::class,
+            'url'   => 'admin/users',
+            'image' => '/images/widget-backgrounds/02.png',
         ],
-        */
+        [
+            'name'  => 'Post',
+            'icon'  => 'voyager-news',
+            'model' => TCG\Voyager\Models\Post::class,
+            'url'   => 'admin/posts',
+            'image' => '/images/widget-backgrounds/03.png',
+        ],
+        [
+            'name'  => 'Page',
+            'icon'  => 'voyager-file-text',
+            'model' => TCG\Voyager\Models\Page::class,
+            'url'   => 'admin/pages',
+            'image' => '/images/widget-backgrounds/04.png',
+        ],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard config
+    |--------------------------------------------------------------------------
+    |
+    | Here you can modify some aspects of your dashboard
+    |
+    */
+
+    'dashboard' => [
+        // Add custom list items to navbar's dropdown
+        'navbar_items' => [
+            'Profile' => [
+                'route'         => 'voyager.profile',
+                'classes'       => 'class-full-of-rum',
+                'icon_class'    => 'voyager-person',
+            ],
+            'Visit site' => [
+                'route'         => '/home',
+                'target_blank'  => true,
+            ],
+        ],
     ],
 
 ];
